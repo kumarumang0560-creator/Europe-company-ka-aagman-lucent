@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>आधुनिक भारतीय इतिहास - Online Mock Test</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- MathJax CDN for LaTeX and Math Rendering -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    /* Custom Scrollbar for side palette */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans text-gray-800 antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- APP CONTAINER -->
+  <div id="app" class="flex-grow flex flex-col">
+
+    <!-- ========================================== -->
+    <!-- PHASE 1: ENTRY SCREEN                      -->
+    <!-- ========================================== -->
+    <div id="phase-entry" class="flex-grow flex items-center justify-center p-4">
+      <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg max-w-md w-full border border-gray-200">
+        <div class="text-center mb-6">
+          <div class="inline-block p-3 bg-blue-100 rounded-full mb-3 text-blue-700">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path></svg>
+          </div>
+          <h1 class="text-2xl font-bold text-gray-900">ऑनलाइन मॉक टेस्ट</h1>
+          <p class="text-sm text-gray-500 mt-1">आधुनिक भारतीय इतिहास: यूरोपीय कम्पनियों का आगमन</p>
+        </div>
+
+        <form id="form-entry" onsubmit="event.preventDefault(); proceedToInstructions();" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">पूरा नाम (Full Name)</label>
+            <input type="text" id="student-name" required placeholder="अपना नाम दर्ज करें" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">अनुक्रमांक (Roll Number)</label>
+            <input type="text" id="student-roll" required placeholder="रोल नंबर दर्ज करें" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+          </div>
+          <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-3 rounded-lg shadow-md hover:shadow-lg transition duration-200">
+            आगे बढ़ें (Proceed) &rarr;
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PHASE 2: INSTRUCTIONS SCREEN               -->
+    <!-- ========================================== -->
+    <div id="phase-instructions" class="hidden flex-grow flex flex-col justify-between max-w-4xl mx-auto w-full p-4 sm:p-6">
+      <div class="bg-white rounded-xl shadow-md p-6 border border-gray-200 space-y-6">
+        <div class="border-b pb-4 flex justify-between items-center flex-wrap gap-2">
+          <div>
+            <h2 class="text-xl font-bold text-gray-900">परीक्षा निर्देश (Exam Instructions)</h2>
+            <p class="text-sm text-gray-500">कृपया सभी निर्देशों को ध्यानपूर्वक पढ़ें।</p>
+          </div>
+          <div class="bg-blue-50 px-4 py-2 rounded-lg border border-blue-200 text-right">
+            <p class="text-xs text-blue-600 font-medium">परीक्षार्थी</p>
+            <p id="display-credentials" class="text-sm font-bold text-blue-900">-</p>
+          </div>
+        </div>
+
+        <div class="space-y-3 text-sm text-gray-700 leading-relaxed max-h-96 overflow-y-auto pr-2">
+          <div class="p-3 bg-amber-50 border-l-4 border-amber-500 text-amber-900 rounded">
+            <strong>समय सीमा:</strong> परीक्षा की कुल अवधि <strong>60 मिनट</strong> है। प्रत्येक प्रश्न के लिए लगभग 1 मिनट 12 सेकंड आवंटित हैं।
+          </div>
+          <h3 class="font-bold text-base text-gray-900 pt-2">सामान्य नियम:</h3>
+          <ul class="list-disc pl-5 space-y-1.5">
+            <li>परीक्षा में कुल <strong>60 बहुविकल्पीय प्रश्न (MCQ)</strong> हैं।</li>
+            <li>प्रत्येक सही उत्तर के लिए अंक दिए जाएंगे। कोई नकारात्मक अंकन नहीं है।</li>
+            <li>आप किसी भी समय दाईं ओर/नीचे दिए गए प्रश्न पैलेट का उपयोग करके किसी भी प्रश्न पर जा सकते हैं।</li>
+          </ul>
+
+          <h3 class="font-bold text-base text-gray-900 pt-2">प्रश्न स्थिति का अर्थ (Question Palette Legend):</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+            <div class="flex items-center space-x-2">
+              <span class="w-6 h-6 rounded bg-gray-200 border border-gray-300 inline-block"></span>
+              <span class="text-xs">नॉट विजिटेड</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="w-6 h-6 rounded bg-red-500 text-white text-xs flex items-center justify-center font-bold">X</span>
+              <span class="text-xs">उत्तर नहीं दिया</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="w-6 h-6 rounded bg-green-500 text-white text-xs flex items-center justify-center font-bold">&#10003;</span>
+              <span class="text-xs">उत्तर दिया गया</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="w-6 h-6 rounded bg-purple-600 text-white text-xs flex items-center justify-center font-bold">&#9733;</span>
+              <span class="text-xs">समीक्षा हेतु चिह्नित</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t pt-4 flex justify-between items-center">
+          <button onclick="backToEntry()" class="px-5 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg text-sm font-medium border">
+            &larr; पीछे जाएँ
+          </button>
+          <button onclick="startTestEngine()" class="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow transition">
+            परीक्षा शुरू करें (Start Test) &rarr;
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PHASE 3: LIVE MOCK TEST ENGINE             -->
+    <!-- ========================================== -->
+    <div id="phase-engine" class="hidden flex-grow flex flex-col h-screen overflow-hidden bg-gray-100">
+
+      <!-- TOP NAV BAR -->
+      <header class="bg-blue-900 text-white px-4 py-2.5 flex items-center justify-between shadow-md z-10 flex-wrap gap-2">
+        <div class="flex items-center space-x-3">
+          <span class="font-bold text-lg tracking-wide hidden sm:inline">Mock Test Engine</span>
+          <span class="bg-blue-800 text-blue-200 text-xs px-2.5 py-1 rounded-full font-mono" id="header-student-id">Student</span>
+        </div>
+
+        <!-- TIMERS -->
+        <div class="flex items-center space-x-3 sm:space-x-6">
+          <div class="bg-blue-950 px-3 py-1 rounded border border-blue-700 text-xs sm:text-sm font-mono flex items-center space-x-1">
+            <span class="text-gray-400">Total:</span>
+            <span id="global-timer" class="font-bold text-green-400">01:00:00</span>
+          </div>
+          <div class="bg-amber-500 text-black px-3 py-1 rounded font-mono font-bold text-xs sm:text-sm flex items-center space-x-1 shadow-inner">
+            <span>Q Time:</span>
+            <span id="question-timer">01:12</span>
+          </div>
+        </div>
+
+        <!-- CONTROLS RIGHT -->
+        <div class="flex items-center space-x-2">
+          <button onclick="toggleDrawer()" class="md:hidden bg-blue-800 hover:bg-blue-700 p-2 rounded text-white">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- MAIN ENGINE CONTENT AREA -->
+      <div class="flex-grow flex overflow-hidden relative">
+
+        <!-- QUESTION WORKSPACE -->
+        <main class="flex-grow flex flex-col justify-between p-4 sm:p-6 overflow-y-auto">
+          
+          <div class="max-w-4xl mx-auto w-full bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-16">
+            
+            <!-- QUESTION HEADER -->
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+              <span id="q-number-title" class="font-bold text-blue-900 text-lg">प्रश्न 1 / 60</span>
+              <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full font-medium">MCQ</span>
+            </div>
+
+            <!-- QUESTION TEXT -->
+            <div id="q-text" class="text-base sm:text-lg font-medium text-gray-800 mb-6 leading-relaxed">
+              <!-- Dynamic Content -->
+            </div>
+
+            <!-- SVG GRAPHICS HOLDER -->
+            <div id="q-graph" class="mb-6 hidden flex justify-center">
+              <!-- Dynamic SVG -->
+            </div>
+
+            <!-- OPTIONS CONTAINER -->
+            <div id="q-options" class="space-y-3">
+              <!-- Dynamic Options -->
+            </div>
+
+          </div>
+
+        </main>
+
+        <!-- SIDE PALETTE DRAWER (DESKTOP & MOBILE TRANSITION) -->
+        <aside id="side-drawer" class="fixed md:relative right-0 top-0 bottom-0 w-80 bg-white border-l border-gray-200 shadow-xl md:shadow-none transform translate-x-full md:translate-x-0 transition-transform duration-300 z-20 flex flex-col h-full">
+          
+          <div class="p-4 border-b bg-gray-50 flex justify-between items-center">
+            <h3 class="font-bold text-gray-800">प्रश्न पैलेट (Question Palette)</h3>
+            <button onclick="toggleDrawer()" class="md:hidden text-gray-500 hover:text-gray-700 text-xl font-bold">&times;</button>
+          </div>
+
+          <!-- PALETTE GRID -->
+          <div class="flex-grow p-4 overflow-y-auto">
+            <div id="palette-grid" class="grid grid-cols-5 gap-2.5">
+              <!-- Dynamic Buttons 1 to 60 -->
+            </div>
+          </div>
+
+          <!-- PALETTE SUMMARY -->
+          <div class="p-4 border-t bg-gray-50 text-xs space-y-2">
+            <div class="grid grid-cols-2 gap-2">
+              <div class="flex items-center space-x-2"><span class="w-3 h-3 bg-green-500 rounded-full"></span><span>उत्तर दिया: <strong id="cnt-answered">0</strong></span></div>
+              <div class="flex items-center space-x-2"><span class="w-3 h-3 bg-red-500 rounded-full"></span><span>उत्तर नहीं दिया: <strong id="cnt-unanswered">0</strong></span></div>
+              <div class="flex items-center space-x-2"><span class="w-3 h-3 bg-purple-600 rounded-full"></span><span>समीक्षा हेतु: <strong id="cnt-review">0</strong></span></div>
+              <div class="flex items-center space-x-2"><span class="w-3 h-3 bg-gray-200 rounded-full"></span><span>नॉट विजिटेड: <strong id="cnt-unvisited">60</strong></span></div>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+
+      <!-- FIXED BOTTOM NAVIGATION CONTROLS -->
+      <footer class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 shadow-lg z-10">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+          
+          <!-- ROW 1 / LEFT ACTIONS -->
+          <div class="flex items-center space-x-2 w-full sm:w-auto justify-between sm:justify-start">
+            <button onclick="markForReview()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs sm:text-sm font-medium transition">
+              समीक्षा एवं अगला (Mark for Review)
+            </button>
+            <button onclick="clearResponse()" class="text-xs sm:text-sm text-gray-600 hover:text-red-600 underline font-medium px-2">
+              उत्तर साफ़ करें
+            </button>
+          </div>
+
+          <!-- ROW 2 / RIGHT ACTIONS -->
+          <div class="flex items-center space-x-2 w-full sm:w-auto justify-between sm:justify-end">
+            <button onclick="prevQuestion()" class="px-4 py-2 border border-gray-300 hover:bg-gray-100 rounded-lg text-xs sm:text-sm font-medium text-gray-700">
+              &larr; पिछला
+            </button>
+            <button onclick="saveAndNext()" class="px-5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs sm:text-sm font-semibold transition shadow">
+              सहेजें और अगला (Save & Next) &rarr;
+            </button>
+            <button onclick="confirmSubmit()" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs sm:text-sm font-bold transition shadow ml-2">
+              सबमिट करें
+            </button>
+          </div>
+
+        </div>
+      </footer>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PHASE 4: SCORECARD & REVISION SCREEN       -->
+    <!-- ========================================== -->
+    <div id="phase-scorecard" class="hidden flex-grow flex flex-col p-4 sm:p-6 max-w-5xl mx-auto w-full">
+      <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 mb-6">
+        
+        <div class="text-center border-b pb-6 mb-6">
+          <h2 class="text-2xl font-bold text-gray-900">परीक्षा परिणाम (Exam Performance Card)</h2>
+          <p class="text-gray-500 text-sm mt-1" id="score-student-detail">परीक्षार्थी विवरण</p>
+        </div>
+
+        <!-- SCORE METRICS GRID -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 text-center">
+          <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+            <p class="text-xs text-blue-600 uppercase font-bold tracking-wider">कुल अंक</p>
+            <p class="text-2xl sm:text-3xl font-extrabold text-blue-900 mt-1" id="res-score">0 / 60</p>
+          </div>
+          <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+            <p class="text-xs text-green-600 uppercase font-bold tracking-wider">सही उत्तर</p>
+            <p class="text-2xl sm:text-3xl font-extrabold text-green-700 mt-1" id="res-correct">0</p>
+          </div>
+          <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+            <p class="text-xs text-red-600 uppercase font-bold tracking-wider">गलत उत्तर</p>
+            <p class="text-2xl sm:text-3xl font-extrabold text-red-700 mt-1" id="res-wrong">0</p>
+          </div>
+          <div class="bg-purple-50 p-4 rounded-xl border border-purple-100">
+            <p class="text-xs text-purple-600 uppercase font-bold tracking-wider">प्रतिशत (Percentile)</p>
+            <p class="text-2xl sm:text-3xl font-extrabold text-purple-900 mt-1" id="res-percentage">0%</p>
+          </div>
+        </div>
+
+        <div id="pass-fail-badge" class="text-center py-3 px-4 rounded-lg font-bold text-lg mb-6">
+          <!-- Pass/Fail Dynamic -->
+        </div>
+
+        <div class="flex justify-between items-center border-t pt-4">
+          <h3 class="text-lg font-bold text-gray-900">विस्तृत उत्तर और व्याख्याएँ (Detailed Revision)</h3>
+          <button onclick="window.print()" class="px-4 py-2 bg-gray-800 text-white text-xs sm:text-sm rounded hover:bg-gray-700">
+            प्रिंट परिणाम
+          </button>
+        </div>
+      </div>
+
+      <!-- REVISION QUESTIONS CONTAINER -->
+      <div id="revision-container" class="space-y-4 mb-10">
+        <!-- Dynamic Solutions List -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JAVASCRIPT ENGINE & HARDCODED DATABASE -->
+  <script>
+    // ==========================================
+    // COMPLETE HARDCODED 60 QUESTION DATABASE
+    // ==========================================
+    const quizDatabase = [
+      {
+        q: "Q1. निम्नलिखित में से कौन-सा क्रम बम्बई पर अंग्रेज़ी नियंत्रण की प्रक्रिया से सबसे अधिक संबंधित है?",
+        options: [
+          "(A) कम्पनी को अंतरण &rarr; दहेज प्राप्ति &rarr; विवाह संबंध &rarr; मुख्यालय स्थानांतरण",
+          "(B) कैथरीन ऑफ ब्रेगेंज़ा व चार्ल्स द्वितीय विवाह (1661) &rarr; दहेज में बम्बई प्राप्ति &rarr; 10 पाउंड वार्षिक किराये पर कम्पनी को अंतरण (1668) &rarr; पश्चिमी तट मुख्यालय बनना (1687)",
+          "(C) दहेज प्राप्ति &rarr; मुख्यालय बनना &rarr; विवाह संबंध &rarr; 10 पाउंड किराया",
+          "(D) पश्चिमी तट मुख्यालय बनना &rarr; विवाह संबंध &rarr; दहेज प्राप्ति &rarr; किराये पर अंतरण"
+        ],
+        ans: 1,
+        exp: "1661 में विवाह द्वारा दहेज प्राप्ति, 1668 में 10 पाउंड किराये पर कम्पनी को अंतरण और 1687 में पश्चिमी तट का मुख्यालय बना।"
+      },
+      {
+        q: "Q2. निम्न में से कौन-सा युग्म सही है?",
+        options: [
+          "(A) बम्बई के प्रथम गवर्नर &mdash; जॉब चारनॉक",
+          "(B) फोर्ट विलियम के प्रथम प्रेसीडेंट &mdash; चार्ल्स आयर",
+          "(C) ईस्ट इंडिया कम्पनी के प्रथम गवर्नर &mdash; गेराल्ड आंगियर",
+          "(D) फोर्ट सेंट जॉर्ज के संस्थापक &mdash; फ्रंको कैरों"
+        ],
+        ans: 1,
+        exp: "कलकत्ता स्थित फोर्ट विलियम के प्रथम प्रेसीडेंट चार्ल्स आयर बने थे।"
+      },
+      {
+        q: "Q3. 1613 में सूरत में अंग्रेज़ी कोठी स्थापना से संबंधित कौन-सा कथन सही है?",
+        options: [
+          "(A) जहाँगीर ने फ़रमान जारी कर थॉमस एल्डवर्थ के अधीन कोठी खोलने की अनुमति दी थी।",
+          "(B) गोलकुण्डा के सुल्तान ने 500 पैगोडा लेकर सूरत में कोठी बनवाई थी।",
+          "(C) सर टॉमस रो के आदेश पर बिना मुग़ल फ़रमान के कोठी स्थापित की गई थी।",
+          "(D) चार्ल्स द्वितीय को दहेज में मिलने के बाद सूरत में फैक्ट्री बनाई गई थी।"
+        ],
+        ans: 0,
+        exp: "जहाँगीर ने 1613 ई. में फ़रमान देकर थॉमस एल्डवर्थ के अधीन सूरत में अंग्रेज़ी कोठी खोलने की अनुमति दी।"
+      },
+      {
+        q: "Q4. अंग्रेज़ों द्वारा मद्रास प्राप्ति और फोर्ट सेंट जॉर्ज स्थापना का सही क्रम कौन-सा है?",
+        options: [
+          "(A) फ्रांसिस डे द्वारा चंद्रगिरि के राजा से पट्टा प्राप्ति (1639) &rarr; क़िलेबंद कोठी का निर्माण &rarr; फोर्ट सेंट जॉर्ज नामकरण &rarr; कोरोमंडल तट पर मुख्यालय बनना",
+          "(B) फोर्ट सेंट जॉर्ज नामकरण &rarr; फ्रांसिस डे द्वारा पट्टा प्राप्ति &rarr; कोरोमंडल तट पर मुख्यालय बनना &rarr; क़िलेबंदी",
+          "(C) क़िलेबंदी निर्माण &rarr; कोरोमंडल मुख्यालय बनना &rarr; फोर्ट सेंट जॉर्ज नामकरण &rarr; पट्टा प्राप्ति",
+          "(D) कोरोमंडल मुख्यालय बनना &rarr; क़िलेबंदी निर्माण &rarr; पट्टा प्राप्ति &rarr; फोर्ट सेंट जॉर्ज नामकरण"
+        ],
+        ans: 0,
+        exp: "1639 में चंद्रगिरि के राजा से पट्टा प्राप्त कर फ्रांसिस डे ने क़िलेबंद कोठी बनाई, जिसे फोर्ट सेंट जॉर्ज कहा गया।"
+      },
+      {
+        q: "Q5. पुर्तगाली आगमन और उनके वायसरायों के कार्यों का सही मिलान पहचानिए: (i) फ्रांसिस्को द अल्मेडा -> भारत में प्रथम पुर्तगाली वायसराय (1505) (ii) अलफांसो द अल्बुकेर्क -> 1510 में बीजापुर से गोवा जीतना",
+        options: [
+          "(A) इनमें से कोई नहीं",
+          "(B) केवल 1",
+          "(C) केवल 2",
+          "(D) 1 और 2 दोनों"
+        ],
+        ans: 3,
+        exp: "अल्मेडा प्रथम पुर्तगाली वायसराय था और अल्बुकेर्क ने 1510 ई. में बीजापुर के यूसुफ आदिल शाह से गोवा जीता था।"
+      },
+      {
+        q: "Q6. कर्नाटक युद्ध एवं उनके वर्ष के संदर्भ में कौन-सा युग्म असुमेलित है?",
+        options: [
+          "(A) वांडीवाश की लड़ाई &mdash; 1765 ई.",
+          "(B) प्रथम कर्नाटक युद्ध &mdash; 1746–1748 ई.",
+          "(C) द्वितीय कर्नाटक युद्ध &mdash; 1749–1754 ई.",
+          "(D) तृतीय कर्नाटक युद्ध &mdash; 1756–1763 ई."
+        ],
+        ans: 0,
+        exp: "वांडीवाश की प्रसिद्ध लड़ाई 1760 ई. में अंग्रेज़ों और फ्रांसीसियों के मध्य लड़ी गई थी।"
+      },
+      {
+        q: "Q7. घटनाओं को कालानुक्रम (प्राचीन से नवीन) व्यवस्थित कीजिए: 1. वास्को-डि-गामा का कालीकट आगमन 2. अल्बुकेर्क द्वारा गोवा पर विजय 3. महारानी एलिज़ाबेथ प्रथम द्वारा अधिकार-पत्र 4. कैप्टन हॉकिन्स का जहाँगीर दरबार आगमन",
+        options: [
+          "(A) 4, 3, 2, 1",
+          "(B) 1, 3, 2, 4",
+          "(C) 1, 2, 3, 4",
+          "(D) 2, 1, 3, 4"
+        ],
+        ans: 2,
+        exp: "वास्को-डि-गामा 1498 ई., अल्बुकेर्क गोवा विजय 1510 ई., अधिकार-पत्र 1600 ई. तथा हॉकिन्स का आगमन 1609 ई. में हुआ था।"
+      },
+      {
+        q: "Q8. यूरोपीय शक्तियों के विरुद्ध भारतीय शासक द्वारा विजय का अपवाद प्रस्तुत करने वाला कोलाचेल युद्ध (1741) का राजवंश कौन-सा था?",
+        options: [
+          "(A) कर्नाटक के नवाब अनवरुद्दीन",
+          "(B) बीजापुर का आदिलशाही वंश",
+          "(C) गोलकुण्डा का कुतुबशाही वंश",
+          "(D) त्रावणकोर राज्य के राजा मार्तंड वर्मा"
+        ],
+        ans: 3,
+        exp: "10 अगस्त 1741 को कोलाचेल की लड़ाई में त्रावणकोर के राजा मार्तंड वर्मा ने डच सेना को पराजित किया था।"
+      },
+      {
+        q: "Q9. फ्रांसीसी कोठियों के स्थापना स्थलों के संदर्भ में इनमें से कौन-सा विकल्प सही है?",
+        options: [
+          "(A) फ्रांसीसियों ने 1510 में बीजापुर से गोवा छीनकर कोठी बनाई थी।",
+          "(B) फ्रैंक्विस मार्टिन ने 1611 में कोचीन को अपना प्रथम मुख्यालय बनाया था।",
+          "(C) फ्रांसीसियों ने अपनी पहली कोठी 1605 में मसूलीपट्टनम में स्थापित की थी।",
+          "(D) भारत में फ्रांसीसियों की प्रथम कोठी फ्रैंको कैरों द्वारा सूरत में 1668 में स्थापित की गई थी।"
+        ],
+        ans: 3,
+        exp: "भारत में फ्रांसीसियों की पहली व्यापारिक फैक्ट्री फ्रैंको कैरों द्वारा 1668 ई. में सूरत में स्थापित हुई थी।"
+      },
+      {
+        q: "Q10. कथन (A): मुग़ल काल में सूरत को 'बाबुल मक्का' कहा जाता था। कारण (R): सूरत बंदरगाह से मक्का के लिए हज यात्रियों के जहाज़ रवाना होते थे।",
+        options: [
+          "(A) A और R दोनों सही हैं और R, A का सही स्पष्टीकरण नहीं हैं",
+          "(B) A गलत हैं किंतु R सही हैं",
+          "(C) A सही हैं किंतु R गलत हैं",
+          "(D) A और R दोनों सही हैं और R, A का सही स्पष्टीकरण हैं"
+        ],
+        ans: 3,
+        exp: "सूरत मुग़ल काल का मुख्य बंदरगाह था जहाँ से मक्का यात्रा के जहाज़ प्रस्थान करते थे, अतः इसे बाबुल मक्का कहा गया।"
+      },
+      {
+        q: "Q11. यूरोपीय कम्पनियों और उनकी प्रथम कोठियों के संदर्भ में कौन-सा युग्म असुमेलित है?",
+        options: [
+          "(A) फ्रांसीसी &mdash; मसूलीपट्टनम (1668)",
+          "(B) डैनिश &mdash; त्रावणकोर (1620)",
+          "(C) पुर्तगाली &mdash; कोचीन (1503)",
+          "(D) डच &mdash; मसूलीपट्टनम (1605)"
+        ],
+        ans: 0,
+        exp: "फ्रांसीसियों ने अपनी पहली व्यापारिक कोठी 1668 ई. में सूरत में स्थापित की थी, न कि मसूलीपट्टनम में।"
+      },
+      {
+        q: "Q12. कर्नाटक युद्ध के दावेदारों और उनके सहयोगियों के संदर्भ में कौन-सा युग्म असुमेलित है?",
+        options: [
+          "(A) मुज़फ़्फ़रजंग &mdash; फ्रांसीसी समर्थित (हैदराबाद)",
+          "(B) नासिरजंग &mdash; अंग्रेज़ समर्थित (हैदराबाद)",
+          "(C) अनवरुद्दीन &mdash; फ्रांसीसी समर्थित (कर्नाटक)",
+          "(D) चंदा साहिब &mdash; फ्रांसीसी समर्थित (कर्नाटक)"
+        ],
+        ans: 2,
+        exp: "कर्नाटक के नवाब अनवरुद्दीन को अंग्रेज़ों का समर्थन प्राप्त था, जबकि फ्रांसीसी चंदा साहिब के पक्ष में थे।"
+      },
+      {
+        q: "Q13. निम्नलिखित में से कौन-सा युग्म गलत है?",
+        options: [
+          "(A) बेदरा का युद्ध &mdash; फ्रांसीसी सेना की पराजय (1759)",
+          "(B) अंबूर का युद्ध &mdash; अनवरुद्दीन की मृत्यु (1749)",
+          "(C) सेंट थोमे का युद्ध &mdash; प्रथम कर्नाटक युद्ध",
+          "(D) वांडीवाश का युद्ध &mdash; 1760 ई."
+        ],
+        ans: 0,
+        exp: "1759 के बेदरा युद्ध में डचों की पराजय हुई थी, फ्रांसीसियों की पराजय 1760 में वांडीवाश में हुई थी।"
+      },
+      {
+        q: "Q14. कौन-सा कथन सही है?",
+        options: [
+          "(A) चार्ल्स द्वितीय ने बम्बई को डैनिश कम्पनी को बेच दिया था।",
+          "(B) 1668 में चार्ल्स द्वितीय ने बम्बई को 10 पाउंड के वार्षिक किराये पर ईस्ट इंडिया कम्पनी को दे दिया था।",
+          "(C) 1668 में फ्रांसीसियों ने बम्बई को अंग्रेज़ों से छीन लिया था।",
+          "(D) पुर्तगाली शासक ने 1687 में बम्बई पर पुनः अधिकार कर लिया था।"
+        ],
+        ans: 1,
+        exp: "चार्ल्स द्वितीय ने 1668 ई. में मात्र 10 पाउंड के वार्षिक किराये पर बम्बई ईस्ट इंडिया कम्पनी को सौंप दिया।"
+      },
+      {
+        q: "Q15. यूरोपीय कम्पनियों और उनकी प्रथम व्यापारिक कोठियों का सही मिलान कीजिए: (A) डच (B) अंग्रेज़ (C) फ्रांसीसी | कोठियाँ: 1. सूरत (1668), 2. मसूलीपट्टनम (1605), 3. मसूलीपट्टनम (1611)",
+        options: [
+          "(A) A-1, B-2, C-3",
+          "(B) A-2, B-1, C-3",
+          "(C) A-2, B-3, C-1",
+          "(D) A-3, B-1, C-2"
+        ],
+        ans: 2,
+        exp: "डचों ने 1605 में मसूलीपट्टनम, अंग्रेज़ों ने 1611 में मसूलीपट्टनम और फ्रांसीसियों ने 1668 में सूरत में कोठी खोली।"
+      },
+      {
+        q: "Q16. कथन (A): प्रथम कर्नाटक युद्ध 1746 में भारत में शुरू हुआ। कारण (R): 1740 में ऑस्ट्रिया के उत्तराधिकार को लेकर यूरोप में अंग्रेज़ों और फ्रांसीसियों के मध्य संघर्ष प्रारंभ हुआ था।",
+        options: [
+          "(A) A सही हैं किंतु R गलत हैं",
+          "(B) A और R दोनों सही हैं और R, A का सही स्पष्टीकरण नहीं हैं",
+          "(C) A और R दोनों सही हैं और R, A का सही स्पष्टीकरण हैं",
+          "(D) A गलत हैं किंतु R सही हैं"
+        ],
+        ans: 2,
+        exp: "यूरोप में ऑस्ट्रिया के उत्तराधिकार युद्ध के कारण ही 1746 ई. में भारत में प्रथम कर्नाटक युद्ध शुरू हुआ।"
+      },
+      {
+        q: "Q17. कर्नाटक के दूसरे युद्ध के संदर्भ में कौन सही है? 1. डूप्ले ने हैदराबाद में मुज़फ़्फ़रजंग और कर्नाटक में चंदा साहिब का साथ दिया था। 2. अंग्रेज़ों ने हैदराबाद में नासिरजंग और कर्नाटक में अनवरुद्दीन का समर्थन किया था।",
+        options: [
+          "(A) 1 और 2 दोनों",
+          "(B) केवल 1",
+          "(C) इनमें से कोई नहीं",
+          "(D) केवल 2"
+        ],
+        ans: 0,
+        exp: "द्वितीय कर्नाटक युद्ध में फ्रांसीसियों ने मुज़फ़्फ़रजंग व चंदा साहिब का तथा अंग्रेज़ों ने नासिरजंग व अनवरुद्दीन का साथ दिया।"
+      },
+      {
+        q: "Q18. 1700-पूर्व स्थापित नगरों/कोठियों के संदर्भ में इनमें से कौन-सा विकल्प सही है?",
+        options: [
+          "(A) गेराल्ड आंगियर ने 1639 में मद्रास नगर की स्थापना की थी।",
+          "(B) फ्रांसिस डे ने 1668 में बम्बई शहर की स्थापना की थी।",
+          "(C) जॉब चारनॉक ने तीन गाँवों (सुतानुती, कालीकट, गोविंदपुर) को मिलाकर कलकत्ता नगर की नींव रखी थी।",
+          "(D) चार्ल्स आयर ने 1668 में सूरत फैक्ट्री की स्थापना की थी।"
+        ],
+        ans: 2,
+        exp: "जॉब चारनॉक ने सुतानुती, कालीकट और गोविंदपुर को मिलाकर कलकत्ता शहर की नींव रखी थी।"
+      },
+      {
+        q: "Q19. कर्नाटक युद्ध और उनकी समाप्ति से जुड़ी संधियों का सही मिलान कीजिए: (A) प्रथम कर्नाटक युद्ध (B) द्वितीय कर्नाटक युद्ध (C) तृतीय कर्नाटक युद्ध | संधियाँ: 1. पेरिस की संधि (1763), 2. एक्स-ला-शापेल की संधि (1748), 3. पांडिचेरी की संधि (1755)",
+        options: [
+          "(A) A-2, B-1, C-3",
+          "(B) A-1, B-2, C-3",
+          "(C) A-2, B-3, C-1",
+          "(D) A-3, B-1, C-2"
+        ],
+        ans: 2,
+        exp: "प्रथम युद्ध एक्स-ला-शापेल संधि (1748), द्वितीय पांडिचेरी संधि (1755) और तृतीय युद्ध पेरिस संधि (1763) से समाप्त हुआ।"
+      },
+      {
+        q: "Q20. यूरोपीय व्यापारिक केंद्रों और उनके स्थापना वर्ष का सही मिलान कीजिए: (A) कोचीन (B) मसूलीपट्टनम (C) त्रावणकोर | वर्ष: 1. 1620, 2. 1503, 3. 1605",
+        options: [
+          "(A) A-2, B-3, C-1",
+          "(B) A-2, B-1, C-3",
+          "(C) A-1, B-2, C-3",
+          "(D) A-3, B-1, C-2"
+        ],
+        ans: 0,
+        exp: "कोचीन (पुर्तगाली 1503), मसूलीपट्टनम (डच 1605) और त्रावणकोर (डैनिश 1620) में स्थापित हुई थी।"
+      },
+      {
+        q: "Q21. कौन-सा कथन सही है?",
+        options: [
+          "(A) पेरिस संधि के बाद फ्रांसीसियों से सभी भारतीय बस्तियाँ हमेशा के लिए छीन ली गई थीं।",
+          "(B) 1763 की पेरिस संधि द्वारा अंग्रेज़ों ने चंद्रनगर को छोड़कर शेष प्रदेश फ्रांसीसियों को लौटा दिए थे।",
+          "(C) 1763 की पेरिस संधि द्वारा पांडिचेरी पर अंग्रेज़ों का स्थायी सैन्य नियंत्रण बना रहा।",
+          "(D) पेरिस संधि के तहत डूप्ले को पुनः भारत का फ्रांसीसी गवर्नर बनाया गया था।"
+        ],
+        ans: 1,
+        exp: "पेरिस संधि (1763) द्वारा चंद्रनगर को छोड़कर अन्य फ्रांसीसी क्षेत्र लौटा दिए गए, जो 1947 तक उनके पास रहे।"
+      },
+      {
+        q: "Q22. 18वीं सदी के कर्नाटक युद्ध के प्रभाव के संदर्भ में इनमें से कौन-सा विकल्प सही है?",
+        options: [
+          "(A) डूप्ले ने अंग्रेज़ी सेना को परास्त कर पूरे दक्षिण भारत पर नियंत्रण कर लिया था।",
+          "(B) फ्रांसीसी सेना ने 1761 में मद्रास पर स्थायी रूप से क़ब्ज़ा कर लिया था।",
+          "(C) वांडीवाश की लड़ाई (1760) के बाद भारत में फ्रांसीसियों की राजनीतिक सत्ता की सम्भावना समाप्त हो गई।",
+          "(D) स्ट्रिंगर लारेंस ने वांडीवाश के युद्ध में फ्रांसीसी सेना का समर्थन किया था।"
+        ],
+        ans: 2,
+        exp: "वांडीवाश में फ्रांसीसियों की निर्णायक हार के बाद भारत में ब्रिटिश साम्राज्य की सर्वोच्चता स्थापित हो गई।"
+      },
+      {
+        q: "Q23. बंगाल के शासक शाहशुजा द्वारा 1651 में अंग्रेज़ों को दी गई विशेष व्यापारिक अनुमति किस पर आधारित है?",
+        options: [
+          "(A) 'निशान' नामक दस्तावेज़ पर",
+          "(B) 'फ़रमान' नामक शाही आदेश पर",
+          "(C) 'सनद' नामक जागीर अनुदान पर",
+          "(D) 'दस्तक' नामक मुक्त व्यापार पास पर"
+        ],
+        ans: 0,
+        exp: "बंगाल के सूबेदार शाहशुजा द्वारा अंग्रेज़ों को दी गई व्यापारिक छूट की अनुमति को 'निशान' कहा जाता था।"
+      },
+      {
+        q: "Q24. कथन (A): अंग्रेज़ों ने 1687 में पश्चिमी तट का मुख्यालय सूरत से हटाकर बम्बई बनाया। कारण (R): बम्बई एक सुरक्षित बंदरगाह था और पूरी तरह अंग्रेज़ों के प्रशासनिक नियंत्रण में आ चुका था।",
+        options: [
+          "(A) A सही हैं किंतु R गलत हैं",
+          "(B) A और R दोनों सही हैं और R, A का सही स्पष्टीकरण नहीं हैं",
+          "(C) A गलत हैं किंतु R सही हैं",
+          "(D) A और R दोनों सही हैं और R, A का सही स्पष्टीकरण हैं"
+        ],
+        ans: 3,
+        exp: "व्यापारिक सुरक्षा और पूर्ण प्रशासनिक नियंत्रण के कारण अंग्रेज़ों ने 1687 में पश्चिमी तट का केंद्र बम्बई बनाया।"
+      },
+      {
+        q: "Q25. कथन (A): 1759 में बेदरा के युद्ध के बाद डचों का भारत में अंतिम रूप से पतन हो गया। कारण (R): बेदरा के युद्ध में अंग्रेज़ी सेना ने डच सेना को निर्णायक रूप से पराजित किया था।",
+        options: [
+          "(A) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं करता है।",
+          "(B) (A) गलत है, परंतु (R) सही है।",
+          "(C) (A) और (R) दोनों सही हैं तथा (R), (A) की सही व्याख्या करता है।",
+          "(D) (A) सही है, परंतु (R) गलत है।"
+        ],
+        ans: 2,
+        exp: "1759 के बेदरा युद्ध में अंग्रेज़ों ने डचों को निर्णायक रूप से हराया, जिससे भारत में डचों की सत्ता समाप्त हो गई।"
+      },
+      {
+        q: "Q26. भारत में आधुनिक शहर स्थापना और उनके संस्थापक के संदर्भ में इनमें से कौन-सा विकल्प सही है?",
+        options: [
+          "(A) कलकत्ता शहर की स्थापना फ्रांसिस डे द्वारा की गई थी।",
+          "(B) पाण्डिचेरी की स्थापना जॉब चारनॉक द्वारा की गई थी।",
+          "(C) मद्रास शहर की स्थापना फ्रैंकोइस मार्टिन द्वारा की गई थी।",
+          "(D) बम्बई शहर की स्थापना गेराल्ड औंगियर द्वारा की गई थी।"
+        ],
+        ans: 3,
+        exp: "सूरत के प्रेसीडेंट एवं बम्बई के गवर्नर गेराल्ड आंगियर ने बम्बई शहर की स्थापना की थी।"
+      },
+      {
+        q: "Q27. फोर्ट विलियम कलकत्ता के संदर्भ में कौन सही है? 1. चार्ल्स आयर फोर्ट विलियम के प्रथम प्रेसीडेंट बने थे। 2. जॉब चारनॉक ने कलकत्ता शहर की नींव रखी थी।",
+        options: [
+          "(A) केवल 1",
+          "(B) केवल 2",
+          "(C) इनमें से कोई नहीं",
+          "(D) 1 और 2 दोनों"
+        ],
+        ans: 3,
+        exp: "जॉब चारनॉक ने कलकत्ता की नींव रखी और फोर्ट विलियम के प्रथम प्रेसीडेंट चार्ल्स आयर बने थे।"
+      },
+      {
+        q: "Q28. 1741 के कोलाचेल युद्ध से संबंधित कौन-सा कथन सही है?",
+        options: [
+          "(A) फ्रांसीसी सेना ने डूप्ले के नेतृत्व में कोलाचेल पर अधिकार किया था।",
+          "(B) पुर्तगाली सेना ने अल्बुकर्क के नेतृत्व में त्रावणकोर पर विजय पाई थी।",
+          "(C) त्रावणकोर के राजा मार्तंड वर्मा ने एडमिरल यूस्टाचियस डी लनॉय के नेतृत्व वाली डच सेना को हराया था।",
+          "(D) अंग्रेज़ी सेना ने रॉबर्ट क्लाइव के अधीन डच सेना को हराया था।"
+        ],
+        ans: 2,
+        exp: "राजा मार्तंड वर्मा ने कोलाचेल की लड़ाई में डच नौसेना कमांडर डी लनॉय को निर्णायक रूप से हराया था।"
+      },
+      {
+        q: "Q29. विदेशी आगंतुकों और उनके दरबार आगमन का सही मिलान पहचानिए: (i) कैप्टन हॉकिन्स -> अप्रैल 1609 में जहाँगीर का दरबार (ii) सर टॉमस रो -> 1615 में जेम्स प्रथम के राजदूत रूप में जहाँगीर दरबार",
+        options: [
+          "(A) 1 और 2 दोनों",
+          "(B) केवल 2",
+          "(C) केवल 1",
+          "(D) इनमें से कोई नहीं"
+        ],
+        ans: 0,
+        exp: "हॉकिन्स अप्रैल 1609 में और सर टॉमस रो 1615 ई. में सम्राट जेम्स प्रथम के राजदूत के रूप में जहाँगीर के दरबार आए।"
+      },
+      {
+        q: "Q30. 1740–1763 के मध्य कर्नाटक घटनाओं को कालानुक्रम (प्राचीन से नवीन) व्यवस्थित कीजिए: 1. ऑस्ट्रिया का उत्तराधिकार युद्ध 2. गोडेहू का फ्रांसीसी गवर्नर बनना 3. वांडीवाश का युद्ध 4. पेरिस की संधि",
+        options: [
+          "(A) 1, 3, 2, 4",
+          "(B) 1, 2, 3, 4",
+          "(C) 4, 3, 2, 1",
+          "(D) 2, 1, 3, 4"
+        ],
+        ans: 1,
+        exp: "ऑस्ट्रिया युद्ध 1740, गोडेहू आगमन 1754, वांडीवाश युद्ध 1760 और पेरिस संधि 1763 ई. में हुई थी।"
+      },
+      {
+        q: "Q31. 1600 में ईस्ट इंडिया कम्पनी के गठन के संदर्भ में इनमें से कौन-सा विकल्प सही है?",
+        options: [
+          "(A) कम्पनी का पहला मुख्यालय सीधे मद्रास में स्थापित किया गया था।",
+          "(B) कम्पनी में कुल 500 साझीदार थे और कैप्टन हॉकिन्स इसके पहले गवर्नर थे।",
+          "(C) इस कम्पनी की स्थापना चार्ल्स द्वितीय के शाही आदेश पर हुई थी।",
+          "(D) प्रारंभ में इस कम्पनी में 217 साझीदार थे और इसका पहला गवर्नर टॉमस स्मिथ था।"
+        ],
+        ans: 3,
+        exp: "31 दिसंबर 1600 को गठित ईस्ट इंडिया कम्पनी में आरंभ में 217 साझीदार थे और प्रथम गवर्नर टॉमस स्मिथ थे।"
+      },
+      {
+        q: "Q32. सर टॉमस रो के संदर्भ में कौन सही है? 1. सम्राट जेम्स प्रथम ने सर टॉमस रो को अपना राजदूत बनाकर मुग़ल सम्राट जहाँगीर के दरबार में भेजा था। 2. वह फ़रवरी 1619 तक भारत में रहा और जहाँगीर व खुर्रम से व्यापारिक छूट प्राप्त करने में सफल हुआ।",
+        options: [
+          "(A) इनमें से कोई नहीं",
+          "(B) केवल 1",
+          "(C) 1 और 2 दोनों",
+          "(D) केवल 2"
+        ],
+        ans: 2,
+        exp: "सर टॉमस रो 1615 से 1619 तक भारत रहा और मुग़ल शासक से व्यापारिक अधिकार प्राप्त करने में सफल रहा।"
+      },
+      {
+        q: "Q33. भारत में फ्रांसीसी बस्ती पाण्डिचेरी के विकास का सही क्रम कौन-सा है?",
+        options: [
+          "(A) विकास &rarr; पेरिस संधि &rarr; अंग्रेज़ों द्वारा छीना जाना &rarr; शेर खाँ लोदी से प्राप्ति",
+          "(B) शेर खाँ लोदी से गाँव प्राप्ति (1674) &rarr; फ्रैंक्विस मार्टिन द्वारा विकास &rarr; अंग्रेज़ों द्वारा छीना जाना (1761) &rarr; पेरिस संधि द्वारा वापसी (1763)",
+          "(C) अंग्रेज़ों द्वारा छीना जाना &rarr; शेर खाँ लोदी से प्राप्ति &rarr; पेरिस संधि &rarr; विकास",
+          "(D) पेरिस संधि द्वारा वापसी &rarr; शेर खाँ लोदी से प्राप्ति &rarr; अंग्रेज़ों द्वारा छीना जाना &rarr; विकास"
+        ],
+        ans: 1,
+        exp: "1674 में गाँव प्राप्ति, मार्टिन द्वारा विकास, 1761 में अंग्रेज़ों का क़ब्ज़ा और 1763 में पेरिस संधि द्वारा वापसी हुई।"
+      },
+      {
+        q: "Q34. निम्नलिखित में से कौन-सा युग्म गलत है?",
+        options: [
+          "(A) स्वीडिश ईस्ट इंडिया कम्पनी स्थापना &mdash; 1664 ई.",
+          "(B) अंग्रेज़ी ईस्ट इंडिया कम्पनी स्थापना &mdash; 1600 ई.",
+          "(C) डैनिश ईस्ट इंडिया कम्पनी स्थापना &mdash; 1616 ई.",
+          "(D) पुर्तगाली कम्पनी स्थापना &mdash; 1498 ई."
+        ],
+        ans: 0,
+        exp: "स्वीडिश ईस्ट इंडिया कम्पनी की स्थापना 1731 ई. में हुई थी, जबकि 1664 ई. में फ्रांसीसी कम्पनी बनी थी।"
+      },
+      {
+        q: "Q35. डैनिश ईस्ट इंडिया कम्पनी के भारत में आगमन और कोठी स्थापना का सही क्रम कौन-सा है?",
+        options: [
+          "(A) कम्पनी स्थापना &rarr; सूरत फैक्ट्री &rarr; त्रावणकोर आगमन",
+          "(B) कम्पनी की स्थापना (1616) &rarr; भारत आगमन &rarr; त्रावणकोर में प्रथम फैक्ट्री स्थापना (1620)",
+          "(C) त्रावणकोर फैक्ट्री &rarr; कम्पनी स्थापना &rarr; भारत आगमन",
+          "(D) भारत आगमन &rarr; त्रावणकोर फैक्ट्री &rarr; कम्पनी स्थापना"
+        ],
+        ans: 1,
+        exp: "डैनिश कम्पनी 1616 ई. में बनी और उसने 1620 ई. में त्रावणकोर (तमिलनाडु) में पहली फैक्ट्री खोली।"
+      },
+      {
+        q: "Q36. विदेशी यात्री/प्रतिनिधि और उनके विवरण का सही मिलान पहचानिए: (i) कैप्टन हॉकिन्स -> रेड ड्रैगन जहाज़ से भारत आगमन (ii) कारनेलयन हाऊटमैन -> 1596 में सुमात्रा पहुँचने वाला प्रथम डच यात्री",
+        options: [
+          "(A) केवल 2",
+          "(B) केवल 1",
+          "(C) 1 और 2 दोनों",
+          "(D) इनमें से कोई नहीं"
+        ],
+        ans: 2,
+        exp: "भारत आने वाला प्रथम अंग्रेज़ी जहाज़ रेड ड्रैगन था और पहला डच यात्री कारनेलयन हाऊटमैन 1596 में सुमात्रा पहुँचा था।"
+      },
+      {
+        q: "Q37. कर्नाटक युद्ध की घटनाओं को कालानुक्रम (प्राचीन से नवीन) व्यवस्थित कीजिए: 1. सेंट थोमे का युद्ध 2. अनवरुद्दीन का मारा जाना 3. क्लाइव द्वारा अर्काट पर अधिकार 4. वांडीवाश की लड़ाई",
+        options: [
+          "(A) 4, 3, 2, 1",
+          "(B) 1, 3, 2, 4",
+          "(C) 1, 2, 3, 4",
+          "(D) 2, 1, 3, 4"
+        ],
+        ans: 2,
+        exp: "सेंट थोमे युद्ध 1746, अनवरुद्दीन का वध 1749, अर्काट विजय 1751 और वांडीवाश की लड़ाई 1760 ई. में हुई।"
+      },
+      {
+        q: "Q38. यूरोपीय कम्पनियों द्वारा भारत में सिक्का ढालने के संदर्भ में स्वर्ण सिक्के (पैगोडा) ढालने का अपवाद किस कम्पनी ने प्रस्तुत किया?",
+        options: [
+          "(A) डच ईस्ट इंडिया कम्पनी (पुलीकट में)",
+          "(B) स्वीडिश कम्पनी (सूरत में)",
+          "(C) डैनिश कम्पनी (त्रावणकोर में)",
+          "(D) पुर्तगाली कम्पनी (गोवा में)"
+        ],
+        ans: 0,
+        exp: "डचों ने पुलीकट की अपनी फैक्ट्री में स्वर्ण पैगोडा सिक्के ढालने की टकसाल स्थापित की थी।"
+      },
+      {
+        q: "Q39. भारत में आने वाली यूरोपीय व्यापारिक कम्पनियों की स्थापना का सही क्रम कौन-सा है?",
+        options: [
+          "(A) पुर्तगाली ईस्ट इंडिया कम्पनी &rarr; डच ईस्ट इंडिया कम्पनी &rarr; अंग्रेज़ी ईस्ट इंडिया कम्पनी &rarr; फ्रांसीसी ईस्ट इंडिया कम्पनी",
+          "(B) डच ईस्ट इंडिया कम्पनी &rarr; पुर्तगाली ईस्ट इंडिया कम्पनी &rarr; फ्रांसीसी ईस्ट इंडिया कम्पनी &rarr; अंग्रेज़ी ईस्ट इंडिया कम्पनी",
+          "(C) अंग्रेज़ी ईस्ट इंडिया कम्पनी &rarr; पुर्तगाली ईस्ट इंडिया कम्पनी &rarr; डच ईस्ट इंडिया कम्पनी &rarr; फ्रांसीसी ईस्ट इंडिया कम्पनी",
+          "(D) पुर्तगाली ईस्ट इंडिया कम्पनी &rarr; अंग्रेज़ी ईस्ट इंडिया कम्पनी &rarr; डच ईस्ट इंडिया कम्पनी &rarr; फ्रांसीसी ईस्ट इंडिया कम्पनी"
+        ],
+        ans: 3,
+        exp: "पुर्तगाली 1498 ई., अंग्रेज़ी 1600 ई., डच 1602 ई. और फ्रांसीसी कम्पनी की स्थापना 1664 ई. में हुई थी।"
+      },
+      {
+        q: "Q40. निम्नलिखित में से कौन-सा क्रम डच व्यापारिक प्रसार से सबसे अधिक संबंधित है?",
+        options: [
+          "(A) कारनेलयन हाऊटमैन का सुमात्रा आगमन (1596) &rarr; मसूलीपट्टनम फैक्ट्री (1605) &rarr; पुलीकट केंद्र &rarr; Patna फैक्ट्री (1632)",
+          "(B) पुलीकट केंद्र &rarr; सुमात्रा आगमन &rarr; Patna फैक्ट्री &rarr; मसूलीपट्टनम फैक्ट्री",
+          "(C) सुमात्रा आगमन &rarr; Patna फैक्ट्री &rarr; पुलीकट केंद्र &rarr; मसूलीपट्टनम फैक्ट्री",
+          "(D) Patna फैक्ट्री &rarr; मसूलीपट्टनम फैक्ट्री &rarr; पुलीकट केंद्र &rarr; सुमात्रा आगमन"
+        ],
+        ans: 0,
+        exp: "1596 में सुमात्रा आगमन, 1605 में मसूलीपट्टनम, उसके बाद पुलीकट और 1632 में पटना में कारखाना स्थापित हुआ।"
+      },
+      {
+        q: "Q41. निम्न में से कौन-सा युग्म सही है?",
+        options: [
+          "(A) फ्रांसीसी ईस्ट इंडिया कम्पनी &mdash; 1602 ई.",
+          "(B) डच ईस्ट इंडिया कम्पनी &mdash; 1664 ई.",
+          "(C) डैनिश ईस्ट इंडिया कम्पनी &mdash; 1616 ई.",
+          "(D) स्वीडिश ईस्ट इंडिया कम्पनी &mdash; 1600 ई."
+        ],
+        ans: 2,
+        exp: "डैनिश ईस्ट इंडिया कम्पनी 1616 ई. में तथा फ्रांसीसी कम्पनी 1664 ई. में स्थापित हुई थी।"
+      },
+      {
+        q: "Q42. अंग्रेज़ी राजदूतों और मुग़ल शासक के संबंधि का सही मिलान पहचानिए: (i) कैप्टन हॉकिन्स -> जहाँगीर के दरबार में आगमन (1609) (ii) सर टॉमस रो -> जहाँगीर एवं खुर्रम से व्यापारिक छूट प्राप्त करना",
+        options: [
+          "(A) केवल 2",
+          "(B) इनमें से कोई नहीं",
+          "(C) केवल 1",
+          "(D) 1 और 2 दोनों"
+        ],
+        ans: 3,
+        exp: "हॉकिन्स 1609 में जहाँगीर के दरबार आया और टॉमस रो ने जहाँगीर व खुर्रम से व्यापारिक रियायतें हासिल की थीं।"
+      },
+      {
+        q: "Q43. यूरोपीय कम्पनियों के तटवर्ती प्राथमिक केंद्रों के संदर्भ में इनमें से कौन-सा विकल्प सही है?",
+        options: [
+          "(A) कोरोमंडल तट पर डचों की पहली कोठी कोचीन में स्थापित की गई थी।",
+          "(B) पूर्वी तट पर अंग्रेज़ों ने प्रथम कोठी मसूलीपट्टनम (1611) में व पश्चिमी तट पर सूरत (1613) में स्थापित की।",
+          "(C) पूर्वी तट पर अंग्रेज़ों ने अपनी पहली कोठी 1608 में सूरत में खोली थी।",
+          "(D) पश्चिमी तट पर फ्रांसीसियों ने अपनी पहली कोठी मसूलीपट्टनम में खोली थी।"
+        ],
+        ans: 1,
+        exp: "पूर्वी तट पर अंग्रेज़ों की पहली फैक्ट्री मसूलीपट्टनम में और पश्चिमी तट पर सूरत में स्थापित की गई थी।"
+      },
+      {
+        q: "Q44. निम्नलिखित में से कौन-सा युग्म गलत है?",
+        options: [
+          "(A) चार्ल्स द्वितीय &mdash; फोर्ट विलियम के प्रथम प्रेसीडेंट",
+          "(B) गोडेहू &mdash; डूप्ले के बाद भारत आने वाला फ्रांसीसी गवर्नर",
+          "(C) थॉमस एल्डवर्थ &mdash; सूरत में 1613 में कोठी स्थापित कराने वाले अंग्रेज़",
+          "(D) टॉमस स्मिथ &mdash; ईस्ट इंडिया कम्पनी के प्रथम गवर्नर"
+        ],
+        ans: 0,
+        exp: "फोर्ट विलियम के प्रथम प्रेसीडेंट चार्ल्स आयर थे, जबकि चार्ल्स द्वितीय ब्रिटेन के सम्राट थे।"
+      },
+      {
+        q: "Q45. यूरोपीय व्यापारिक आगमन और उनके केंद्रों का सही मिलान कीजिए: (A) वास्को-डि-गामा (B) फ्रांसिस डे (C) फ्रैंकोइस मार्टिन | केंद्र: 1. पांडिचेरी, 2. कालीकट, 3. मद्रास (फोर्ट सेंट जॉर्ज)",
+        options: [
+          "(A) A-1, B-2, C-3",
+          "(B) A-2, B-3, C-1",
+          "(C) A-2, B-1, C-3",
+          "(D) A-3, B-1, C-2"
+        ],
+        ans: 1,
+        exp: "वास्को-डि-गामा कालीकट (1498), फ्रांसिस डे मद्रास (1639) और फ्रैंक्विस मार्टिन पांडिचेरी (1674) से जुड़े थे।"
+      },
+      {
+        q: "Q46. बंगाल में अंग्रेज़ी प्रभाव स्थापना की घटनाओं को कालानुक्रम (प्राचीन से नवीन) व्यवस्थित कीजिए: 1. शाहशुजा द्वारा निशान अनुमति 2. तीन गाँवों की ज़मींदारी प्राप्ति 3. फोर्ट विलियम का निर्माण 4. चार्ल्स आयर का प्रेसीडेंट बनना",
+        options: [
+          "(A) 2, 1, 3, 4",
+          "(B) 1, 3, 2, 4",
+          "(C) 1, 2, 3, 4",
+          "(D) 4, 3, 2, 1"
+        ],
+        ans: 2,
+        exp: "निशान 1651 ई., ज़मींदारी प्राप्ति 1698 ई., इसके बाद फोर्ट विलियम निर्माण और चार्ल्स आयर का पदभार हुआ।"
+      },
+      {
+        q: "Q47. गोलकुण्डा के सुल्तान द्वारा 1632 में अंग्रेज़ों को दिया गया 'सुनहला फ़रमान' किस पर आधारित है?",
+        options: [
+          "(A) 500 पैगोडा वार्षिक कर देकर गोलकुण्डा राज्य के बंदरगाहों पर स्वतंत्रतापूर्वक व्यापार करने पर",
+          "(B) अंग्रेज़ों को गोलकुण्डा में स्थायी सेना रखने की अनुमति देने पर",
+          "(C) अंग्रेज़ों को गोलकुण्डा नगर का सम्पूर्ण प्रशासन सौंपने पर",
+          "(D) अंग्रेज़ों को बिना किसी शर्त के निःशुल्क भूमि आवंटित करने पर"
+        ],
+        ans: 0,
+        exp: "सुनहले फ़रमान के अनुसार अंग्रेज़ 500 पैगोडा वार्षिक कर देकर गोलकुण्डा के बंदरगाहों पर स्वतंत्र व्यापार कर सकते थे।"
+      },
+      {
+        q: "Q48. निम्न में से कौन-सा युग्म सही है?",
+        options: [
+          "(A) फ्रांसीसी प्रथम फैक्ट्री &mdash; मसूलीपट्टनम (1605)",
+          "(B) पुर्तगाली प्रथम फैक्ट्री &mdash; कोचीन (1503)",
+          "(C) अंग्रेज़ प्रथम फैक्ट्री &mdash; त्रावणकोर (1620)",
+          "(D) डच प्रथम फैक्ट्री &mdash; सूरत (1608)"
+        ],
+        ans: 1,
+        exp: "पुर्तगालियों ने अपनी पहली फैक्ट्री 1503 में कोचीन में खोली थी। डचों ने 1605 में मसूलीपट्टनम में खोली थी।"
+      },
+      {
+        q: "Q49. 1751 में रॉबर्ट क्लाइव द्वारा अर्काट के घेरे की योजना किस पर आधारित है?",
+        options: [
+          "(A) हैदराबाद के निज़ाम को सीधे बंदी बनाने की योजना पर",
+          "(B) फ्रांसीसी गवर्नर डूप्ले को सीधे आत्मसमर्पण कराने पर",
+          "(C) पांडिचेरी के बंदरगाह पर सीधे समुद्री घेराबंदी करने पर",
+          "(D) त्रिचनापल्ली पर फ्रांसीसी दबाव कम करने के लिए कर्नाटक की राजधानी अर्काट पर अधिकार करने पर"
+        ],
+        ans: 3,
+        exp: "मोहम्मद अली को बचाने और त्रिचनापल्ली का घेरा कमजोर करने के लिए क्लाइव ने अर्काट पर घेरा डाला था।"
+      },
+      {
+        q: "Q50. यूरोपीय कम्पनियों में भारत में प्रथम बार औद्योगिक वेतनभोगी रखने का अपवाद प्रस्तुत करने वाली कम्पनी कौन-सी थी?",
+        options: [
+          "(A) डच ईस्ट इंडिया कम्पनी",
+          "(B) पुर्तगाली कम्पनी",
+          "(C) अंग्रेज़ी ईस्ट इंडिया कम्पनी",
+          "(D) फ्रांसीसी ईस्ट इंडिया कम्पनी"
+        ],
+        ans: 0,
+        exp: "डचों ने भारत में व्यापारिक गतिविधियों के संचालन हेतु पहली बार औद्योगिक वेतनभोगी कर्मचारी रखे थे।"
+      },
+      {
+        q: "Q51. कथन (A): 1754 में डूप्ले को वापस फ्रांस बुला लिया गया। कारण (R): द्वितीय कर्नाटक युद्ध में भारी धनहानि और फ्रांसीसी सेना के आत्मसमर्पण के कारण उसकी नीतियाँ विफल हो गई थीं।",
+        options: [
+          "(A) (A) गलत है, परंतु (R) सही है।",
+          "(B) (A) सही है, परंतु (R) गलत है।",
+          "(C) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं करता है।",
+          "(D) (A) और (R) दोनों सही हैं तथा (R), (A) की सही व्याख्या करता है।"
+        ],
+        ans: 3,
+        exp: "द्वितीय कर्नाटक युद्ध में विफलता और सेना के आत्मसमर्पण के बाद फ्रांसीसी सरकार ने डूप्ले को वापस बुला लिया।"
+      },
+      {
+        q: "Q52. डच व्यापारिक गतिविधियों से संबंधित कौन-सा कथन सही है?",
+        options: [
+          "(A) डचों ने भारत आने पर सबसे पहले गोवा पर अधिकार किया था।",
+          "(B) डचों ने पुलीकट में अपने स्वर्ण सिक्के (पैगोडा) ढाले और उसे समस्त गतिविधियों का केंद्र बनाया था।",
+          "(C) डचों ने अपनी प्रथम कोठी 1600 में सूरत में स्थापित की थी।",
+          "(D) डचों ने 1639 में मद्रास को पट्टे पर प्राप्त किया था।"
+        ],
+        ans: 1,
+        exp: "डचों ने पुलीकट में पैगोडा सिक्के ढाले और उसे गतिविधियों का केंद्र बनाया। पहली फैक्ट्री मसूलीपट्टनम में थी।"
+      },
+      {
+        q: "Q53. कौन-सा कथन सही है?",
+        options: [
+          "(A) 1760 में सर आयरकूट के नेतृत्व में अंग्रेज़ी सेना ने वांडीवाश की लड़ाई में फ्रांसीसियों को बुरी तरह हराया था।",
+          "(B) 1761 में फ्रांसीसियों ने अंग्रेज़ों से मद्रास पूरी तरह छीन लिया था।",
+          "(C) वांडीवाश के युद्ध के बाद अंग्रेज़ों ने चंद्रनगर पर फ्रांसीसी अधिकार स्थापित किया।",
+          "(D) वांडीवाश की लड़ाई में स्ट्रिंगर लारेंस ने फ्रांसीसी सेना का नेतृत्व किया था।"
+        ],
+        ans: 0,
+        exp: "1760 में सर आयरकूट के नेतृत्व वाली अंग्रेज़ी सेना ने वांडीवाश के युद्ध में फ्रांसीसियों को पराजित किया था।"
+      },
+      {
+        q: "Q54. यूरोपीय कम्पनियों एवं उनके केंद्रों के संदर्भ में कौन-सा युग्म असुमेलित है?",
+        options: [
+          "(A) अंग्रेज़ी कोठी (1639) &mdash; फोर्ट सेंट जॉर्ज",
+          "(B) डच फैक्ट्री (1632) &mdash; Patna",
+          "(C) पुर्तगाली एकमात्र दक्षिण-पूर्वी बस्ती &mdash; सन-थोमे",
+          "(D) फ्रांसीसी प्रथम फैक्ट्री &mdash; पुलीकट"
+        ],
+        ans: 3,
+        exp: "फ्रांसीसियों की प्रथम व्यापारिक कोठी 1668 ई. में सूरत में फ्रैंको कैरों द्वारा खोली गई थी।"
+      },
+      {
+        q: "Q55. पुर्तगाली वायसराय के संदर्भ में कौन सही है? 1. फ्रांसिस्को द अल्मेडा 1505 में भारत में प्रथम पुर्तगाली वायसराय बनकर आया था। 2. अलफांसो द अल्बुकेर्क ने 1510 में बीजापुर के यूसुफ आदिल शाह से गोवा को जीता था।",
+        options: [
+          "(A) इनमें से कोई नहीं",
+          "(B) केवल 2",
+          "(C) केवल 1",
+          "(D) 1 और 2 दोनों"
+        ],
+        ans: 3,
+        exp: "अल्मेडा भारत में प्रथम पुर्तगाली वायसराय था तथा अल्बुकेर्क ने 1510 ई. में बीजापुर से गोवा जीता था।"
+      },
+      {
+        q: "Q56. कथन (A): 1668 में चार्ल्स द्वितीय ने बम्बई को ईस्ट इंडिया कम्पनी को 10 पाउंड के वार्षिक किराये पर दिया। कारण (R): चार्ल्स द्वितीय को 1661 में पुर्तगाली राजकुमारी कैथरीन से विवाह पर बम्बई दहेज में मिला था।",
+        options: [
+          "(A) (A) और (R) दोनों सही हैं, परंतु (R), (A) की सही व्याख्या नहीं करता है।",
+          "(B) (A) और (R) दोनों सही हैं तथा (R), (A) की सही व्याख्या करता है।",
+          "(C) (A) गलत है, परंतु (R) सही है।",
+          "(D) (A) सही है, परंतु (R) गलत है।"
+        ],
+        ans: 1,
+        exp: "चार्ल्स द्वितीय को पुर्तगाल से दहेज में बम्बई मिला था, जिसे उसने 1668 में 10 पाउंड वार्षिक पर कम्पनी को सौंप दिया।"
+      },
+      {
+        q: "Q57. निम्न में से कौन-सा युग्म सही है?",
+        options: [
+          "(A) 1000 रुपये भुगतान &mdash; बम्बई प्राप्ति",
+          "(B) 1200 रुपये भुगतान &mdash; सुतानुती, कालीकट एवं गोविंदपुर की ज़मींदारी",
+          "(C) 500 पैगोडा भुगतान &mdash; मद्रास पट्टे पर प्राप्ति",
+          "(D) 10 पाउंड किराया &mdash; कलकत्ता नगर प्राप्ति"
+        ],
+        ans: 1,
+        exp: "1698 ई. में अंग्रेज़ों ने 1200 रुपये देकर तीन गाँवों सुतानुती, कालीकट और गोविंदपुर की ज़मींदारी ली थी।"
+      },
+      {
+        q: "Q58. निम्नलिखित में से कौन-सा क्रम वास्को-डि-गामा के भारत आगमन की प्रक्रिया से सबसे अधिक संबंधित है?",
+        options: [
+          "(A) कालीकट बंदरगाह आगमन &rarr; सूरत आगमन &rarr; अब्दुल मजीद से भेंट &rarr; कोचीन में व्यापार",
+          "(B) कोचीन आगमन &rarr; कालीकट यात्रा &rarr; अब्दुल मजीद से भेंट &rarr; मसूलीपट्टनम प्राप्ति",
+          "(C) लिस्बन से प्रस्थान &rarr; उत्तमाशा अंतरीप यात्रा &rarr; गुजराती पथ-प्रदर्शक अब्दुल मजीद का सहयोग &rarr; कालीकट बंदरगाह आगमन",
+          "(D) उत्तमाशा अंतरीप यात्रा &rarr; सूरत आगमन &rarr; अब्दुल मजीद का सहयोग &rarr; गोवा प्राप्ति"
+        ],
+        ans: 2,
+        exp: "वास्को-डि-गामा उत्तमाशा अंतरीप होते हुए गुजराती पथ-प्रदर्शक अब्दुल मजीद की मदद से कालीकट पहुँचा था।"
+      },
+      {
+        q: "Q59. फ्रांसीसी कम्पनी के निदेशक फ्रैंकोइस मार्टिन से संबंधित कौन-सा कथन सही है?",
+        options: [
+          "(A) उसने 1668 में सूरत में पहली फ्रांसीसी कोठी स्थापित की थी।",
+          "(B) उसने 1674 में वालिकोंडापुर के सूबेदार शेर खाँ लोदी से पुडुचेरी नामक गाँव प्राप्त किया था।",
+          "(C) उसने 1760 में वांडीवाश के युद्ध में फ्रांसीसी सेना का नेतृत्व किया था।",
+          "(D) उसने 1632 में गोलकुण्डा के सुल्तान से सुनहला फ़रमान प्राप्त किया था।"
+        ],
+        ans: 1,
+        exp: "फ्रैंक्विस मार्टिन ने 1674 में शेर खाँ लोदी से पुडुचेरी प्राप्त किया, जो बाद में पांडिचेरी बना।"
+      },
+      {
+        q: "Q60. कौन-सा कथन सही है?",
+        options: [
+          "(A) भारत आने वाला पहला अंग्रेज़ी जहाज़ रेड ड्रैगन था।",
+          "(B) मुग़ल दरबार में आने वाला प्रथम अंग्रेज़ सर टॉमस रो था।",
+          "(C) कोलाचेल की लड़ाई में डच सेना ने त्रावणकोर के राजा को हराया था।",
+          "(D) फ्रांसीसी ईस्ट इंडिया कम्पनी की स्थापना 1602 में हुई थी।"
+        ],
+        ans: 0,
+        exp: "भारत आने वाला प्रथम अंग्रेज़ी जहाज़ रेड ड्रैगन था। दरबार में आने वाला पहला अंग्रेज़ हॉकिन्स था।"
+      }
+    ];
+
+    // APPLICATION STATE
+    let studentData = { name: "", roll: "" };
+    let currentQIndex = 0;
+    let userAnswers = new Array(60).fill(null); // stores option index or null
+    let questionStates = new Array(60).fill('unvisited'); // 'unvisited', 'unanswered', 'answered', 'review'
+
+    // TIMERS
+    let globalTimeSeconds = 3600; // 60 minutes
+    let qTimeSeconds = 72; // 1 min 12 secs
+    let globalTimerInterval = null;
+    let qTimerInterval = null;
+
+    // DOM ELEMENTS
+    const phaseEntry = document.getElementById('phase-entry');
+    const phaseInstructions = document.getElementById('phase-instructions');
+    const phaseEngine = document.getElementById('phase-engine');
+    const phaseScorecard = document.getElementById('phase-scorecard');
+
+    // PHASE SWITCHING
+    function proceedToInstructions() {
+      const name = document.getElementById('student-name').value.trim();
+      const roll = document.getElementById('student-roll').value.trim();
+      if (!name || !roll) return;
+
+      studentData.name = name;
+      studentData.roll = roll;
+
+      document.getElementById('display-credentials').innerText = `${name} (Roll: ${roll})`;
+      phaseEntry.classList.add('hidden');
+      phaseInstructions.classList.remove('hidden');
+    }
+
+    function backToEntry() {
+      phaseInstructions.classList.add('hidden');
+      phaseEntry.classList.remove('hidden');
+    }
+
+    function startTestEngine() {
+      phaseInstructions.classList.add('hidden');
+      phaseEngine.classList.remove('hidden');
+
+      document.getElementById('header-student-id').innerText = `${studentData.name} (${studentData.roll})`;
+
+      initPalette();
+      loadQuestion(0);
+      startGlobalTimer();
+      startQTimer();
+    }
+
+    // TIMER LOGIC
+    function startGlobalTimer() {
+      globalTimerInterval = setInterval(() => {
+        if (globalTimeSeconds <= 0) {
+          clearInterval(globalTimerInterval);
+          autoSubmit();
+          return;
+        }
+        globalTimeSeconds--;
+        const hrs = String(Math.floor(globalTimeSeconds / 3600)).padStart(2, '0');
+        const mins = String(Math.floor((globalTimeSeconds % 3600) / 60)).padStart(2, '0');
+        const secs = String(globalTimeSeconds % 60).padStart(2, '0');
+        document.getElementById('global-timer').innerText = `${hrs}:${mins}:${secs}`;
+      }, 1000);
+    }
+
+    function startQTimer() {
+      clearInterval(qTimerInterval);
+      qTimeSeconds = 72;
+      updateQTimerDisplay();
+      qTimerInterval = setInterval(() => {
+        if (qTimeSeconds > 0) {
+          qTimeSeconds--;
+          updateQTimerDisplay();
+        }
+      }, 1000);
+    }
+
+    function updateQTimerDisplay() {
+      const mins = String(Math.floor(qTimeSeconds / 60)).padStart(2, '0');
+      const secs = String(qTimeSeconds % 60).padStart(2, '0');
+      document.getElementById('question-timer').innerText = `${mins}:${secs}`;
+    }
+
+    // PALETTE GRID GENERATION
+    function initPalette() {
+      const grid = document.getElementById('palette-grid');
+      grid.innerHTML = '';
+      for (let i = 0; i < 60; i++) {
+        const btn = document.createElement('button');
+        btn.id = `palette-btn-${i}`;
+        btn.className = 'w-9 h-9 text-xs font-bold rounded-lg flex items-center justify-center border transition bg-gray-200 text-gray-700 hover:bg-gray-300';
+        btn.innerText = i + 1;
+        btn.onclick = () => jumpToQuestion(i);
+        grid.appendChild(btn);
+      }
+      updatePaletteCounts();
+    }
+
+    function updatePaletteCounts() {
+      let answered = 0, unanswered = 0, review = 0, unvisited = 0;
+      questionStates.forEach(st => {
+        if (st === 'answered') answered++;
+        else if (st === 'unanswered') unanswered++;
+        else if (st === 'review') review++;
+        else unvisited++;
+      });
+      document.getElementById('cnt-answered').innerText = answered;
+      document.getElementById('cnt-unanswered').innerText = unanswered;
+      document.getElementById('cnt-review').innerText = review;
+      document.getElementById('cnt-unvisited').innerText = unvisited;
+    }
+
+    function renderPaletteButton(index) {
+      const btn = document.getElementById(`palette-btn-${index}`);
+      if (!btn) return;
+
+      const state = questionStates[index];
+      btn.className = 'w-9 h-9 text-xs font-bold rounded-lg flex items-center justify-center border transition ';
+
+      if (state === 'answered') {
+        btn.className += 'bg-green-500 text-white border-green-600';
+      } else if (state === 'unanswered') {
+        btn.className += 'bg-red-500 text-white border-red-600';
+      } else if (state === 'review') {
+        btn.className += 'bg-purple-600 text-white border-purple-700';
+      } else {
+        btn.className += 'bg-gray-200 text-gray-700 border-gray-300';
+      }
+
+      if (index === currentQIndex) {
+        btn.className += ' ring-2 ring-offset-1 ring-blue-600 font-extrabold';
+      }
+    }
+
+    // QUESTION RENDERING
+    function loadQuestion(index) {
+      const prevQ = currentQIndex;
+      currentQIndex = index;
+
+      if (questionStates[prevQ] === 'unvisited') {
+        questionStates[prevQ] = userAnswers[prevQ] !== null ? 'answered' : 'unanswered';
+      }
+      if (questionStates[currentQIndex] === 'unvisited') {
+        questionStates[currentQIndex] = 'unanswered';
+      }
+
+      renderPaletteButton(prevQ);
+      renderPaletteButton(currentQIndex);
+      updatePaletteCounts();
+
+      const qData = quizDatabase[index];
+      document.getElementById('q-number-title').innerText = `प्रश्न ${index + 1} / 60`;
+      document.getElementById('q-text').innerHTML = qData.q;
+
+      // Render Options
+      const optionsContainer = document.getElementById('q-options');
+      optionsContainer.innerHTML = '';
+
+      qData.options.forEach((optText, optIdx) => {
+        const isSelected = userAnswers[index] === optIdx;
+        const optLabel = document.createElement('label');
+        optLabel.className = `flex items-start p-3.5 rounded-lg border cursor-pointer transition ${
+          isSelected ? 'bg-blue-50 border-blue-600 ring-1 ring-blue-600' : 'bg-white border-gray-200 hover:bg-gray-50'
+        }`;
+
+        optLabel.innerHTML = `
+          <input type="radio" name="option" value="${optIdx}" ${isSelected ? 'checked' : ''} onchange="selectOption(${optIdx})" class="mt-1 text-blue-600 focus:ring-blue-500">
+          <span class="ml-3 text-sm sm:text-base text-gray-800 leading-snug">${optText}</span>
+        `;
+        optionsContainer.appendChild(optLabel);
+      });
+
+      startQTimer();
+
+      // Trigger MathJax re-render if loaded
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        MathJax.typesetPromise();
+      }
+    }
+
+    function selectOption(optIdx) {
+      userAnswers[currentQIndex] = optIdx;
+      questionStates[currentQIndex] = 'answered';
+      renderPaletteButton(currentQIndex);
+      updatePaletteCounts();
+      loadQuestion(currentQIndex); // Refresh options UI selection state
+    }
+
+    function clearResponse() {
+      userAnswers[currentQIndex] = null;
+      questionStates[currentQIndex] = 'unanswered';
+      renderPaletteButton(currentQIndex);
+      updatePaletteCounts();
+      loadQuestion(currentQIndex);
+    }
+
+    function saveAndNext() {
+      if (userAnswers[currentQIndex] !== null) {
+        questionStates[currentQIndex] = 'answered';
+      } else {
+        questionStates[currentQIndex] = 'unanswered';
+      }
+      renderPaletteButton(currentQIndex);
+      updatePaletteCounts();
+
+      if (currentQIndex < 59) {
+        loadQuestion(currentQIndex + 1);
+      }
+    }
+
+    function markForReview() {
+      questionStates[currentQIndex] = 'review';
+      renderPaletteButton(currentQIndex);
+      updatePaletteCounts();
+
+      if (currentQIndex < 59) {
+        loadQuestion(currentQIndex + 1);
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQIndex > 0) {
+        loadQuestion(currentQIndex - 1);
+      }
+    }
+
+    function jumpToQuestion(idx) {
+      loadQuestion(idx);
+      // Close side drawer on mobile when selection is made
+      if (window.innerWidth < 768) {
+        toggleDrawer();
+      }
+    }
+
+    function toggleDrawer() {
+      const drawer = document.getElementById('side-drawer');
+      drawer.classList.toggle('translate-x-full');
+    }
+
+    // SUBMISSION & SCORECARD LOGIC
+    function confirmSubmit() {
+      if (confirm("क्या आप निश्चित रूप से परीक्षा सबमिट करना चाहते हैं?")) {
+        submitExam();
+      }
+    }
+
+    function autoSubmit() {
+      alert("समय समाप्त हो गया है! आपकी परीक्षा स्वचालित रूप से सबमिट की जा रही है।");
+      submitExam();
+    }
+
+    function submitExam() {
+      clearInterval(globalTimerInterval);
+      clearInterval(qTimerInterval);
+
+      phaseEngine.classList.add('hidden');
+      phaseScorecard.classList.remove('hidden');
+
+      // Calculate score
+      let correct = 0;
+      let wrong = 0;
+      userAnswers.forEach((ans, idx) => {
+        if (ans !== null) {
+          if (ans === quizDatabase[idx].ans) {
+            correct++;
+          } else {
+            wrong++;
+          }
+        }
+      });
+
+      const percentage = ((correct / 60) * 100).toFixed(1);
+
+      document.getElementById('score-student-detail').innerText = `${studentData.name} | Roll No: ${studentData.roll}`;
+      document.getElementById('res-score').innerText = `${correct} / 60`;
+      document.getElementById('res-correct').innerText = correct;
+      document.getElementById('res-wrong').innerText = wrong;
+      document.getElementById('res-percentage').innerText = `${percentage}%`;
+
+      const passBadge = document.getElementById('pass-fail-badge');
+      if (parseFloat(percentage) >= 70) {
+        passBadge.className = "text-center py-3 px-4 rounded-lg font-bold text-lg mb-6 bg-green-100 text-green-800 border border-green-200";
+        passBadge.innerText = "उत्तीर्ण (PASS) - उत्कृष्ट प्रदर्शन!";
+      } else {
+        passBadge.className = "text-center py-3 px-4 rounded-lg font-bold text-lg mb-6 bg-red-100 text-red-800 border border-red-200";
+        passBadge.innerText = "अनुत्तीर्ण (FAIL) - न्यूनतम अंक: 70%";
+      }
+
+      renderRevisionList();
+    }
+
+    function renderRevisionList() {
+      const container = document.getElementById('revision-container');
+      container.innerHTML = '';
+
+      quizDatabase.forEach((qData, idx) => {
+        const userAns = userAnswers[idx];
+        const isCorrect = userAns === qData.ans;
+        const isAttempted = userAns !== null;
+
+        const card = document.createElement('div');
+        card.className = `bg-white p-5 rounded-xl border shadow-sm ${
+          !isAttempted ? 'border-gray-300' : isCorrect ? 'border-green-300 bg-green-50/20' : 'border-red-300 bg-red-50/20'
+        }`;
+
+        let statusTag = '';
+        if (!isAttempted) {
+          statusTag = '<span class="bg-gray-100 text-gray-700 text-xs px-2.5 py-1 rounded font-bold">अनुत्तरित (Skipped)</span>';
+        } else if (isCorrect) {
+          statusTag = '<span class="bg-green-100 text-green-800 text-xs px-2.5 py-1 rounded font-bold">सही (+1)</span>';
+        } else {
+          statusTag = '<span class="bg-red-100 text-red-800 text-xs px-2.5 py-1 rounded font-bold">गलत (0)</span>';
+        }
+
+        let optionsMarkup = '';
+        qData.options.forEach((optText, oIdx) => {
+          let optStyle = 'text-gray-700 bg-white border-gray-200';
+          if (oIdx === qData.ans) {
+            optStyle = 'text-green-900 bg-green-100 border-green-400 font-semibold';
+          }
+          if (userAns === oIdx && !isCorrect) {
+            optStyle = 'text-red-900 bg-red-100 border-red-400 font-semibold';
+          }
+
+          optionsMarkup += `
+            <div class="p-2.5 rounded border text-sm ${optStyle} flex justify-between items-center">
+              <span>${optText}</span>
+              ${oIdx === qData.ans ? '<span class="text-xs text-green-700 font-bold">&#10003; सही उत्तर</span>' : ''}
+              ${userAns === oIdx && !isCorrect ? '<span class="text-xs text-red-700 font-bold">आपका उत्तर</span>' : ''}
+            </div>
+          `;
+        });
+
+        card.innerHTML = `
+          <div class="flex justify-between items-start mb-3 gap-2">
+            <p class="font-bold text-gray-900 text-base leading-snug">${qData.q}</p>
+            <div>${statusTag}</div>
+          </div>
+          <div class="space-y-2 mb-4">
+            ${optionsMarkup}
+          </div>
+          <div class="bg-blue-50 border-l-4 border-blue-500 p-3 rounded text-sm text-blue-900">
+            <strong>व्याख्या:</strong> ${qData.exp}
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        MathJax.typesetPromise();
+      }
+    }
+  </script>
+</body>
+</html>
+```eof
